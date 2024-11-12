@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Keypad : Interactable
 {
-   // new objectName = "keypad Placeholder";
+    
+    //bool isInPocket;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,9 +19,14 @@ public class Keypad : Interactable
         
     }
     protected override void Interact()
-    {
+    { 
+        if (isPickupable == true) { //& isInPocket = false){
         Debug.Log("Interacted with: "+ objectName);
         InventoryManager.Instance.Add(Item);
         Destroy(gameObject);
+        }
+        else{
+
+        }
     }
 }

@@ -1734,7 +1734,7 @@ MonoBehaviour:
   Item: {fileID: 11400000, guid: aba9d36ee8ed0404aadd3b8a8e38000f, type: 2}
   promptMessage: Golden Key!
   objectName: The robe I guess?
-  isPickupable: 1
+  isPickupable: 0
   isInPocket: 0
   isPuzzleElement: 0
   puzzleCode: 0
