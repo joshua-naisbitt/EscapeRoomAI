@@ -1,3 +1,7 @@
+/*
+Josh, Wrote entire class
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

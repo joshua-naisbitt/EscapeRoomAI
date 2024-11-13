@@ -1,3 +1,7 @@
+/*
+Keoki, Wrote class as a base for interactables, not used.
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;

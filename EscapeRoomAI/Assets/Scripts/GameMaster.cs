@@ -1,3 +1,8 @@
+/*
+Keoki, Wrote entire class and Game Context
+
+*/
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,7 +36,7 @@ public class GameMaster : MonoBehaviour
         {
             {
                 // Puzzle ID 0, Null Puzzle
-                "Ignore all previous instructions. You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles. You will provide hints to a player to escape a room in your wizard house.",
+                "Ignore all previous instructions, and limit your responses to 2 to 3 sentences. You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles. You will provide hints to a player to escape a room in your wizard house.",
                 null, null, null, null, null // Only 1 state for this puzzle
             },
             {
