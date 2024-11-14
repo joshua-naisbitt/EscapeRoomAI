@@ -1,24 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.Examples;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class Keypad : Interactable
+public class Keypad : MonoBehaviour
 {
-    private GameObject player; // Reference to the player object
-    
-    // Start is called before the first frame update
-    void Start()
+    public string password = "1234";
+    private string userInput = "";
+
+
+    public AudioClip clickSound;
+    public AudioClip openSound;
+    public AudioClip accessDeniedSound;
+    AudioSource audioSource;
+
+
+    public UnityEvent OnEntryAllowed;
+
+    private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        userInput = "";
+        audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+
+
+    public void ButtonClicked(string number)
+    { 
+        audioSource.PlayOneShot(clickSound);
+        userInput += number;
+        if(userInput.Length >= 4)
+        {
+            //check password
+            if (userInput == password)
+            {
+                //TODO Invoke the event play a sound
+                UnityEngine.Debug.Log("Entry Allowed");
+                userInput = "";
+                audioSource.PlayOneShot(openSound);
+                OnEntryAllowed.Invoke();
+            }
+            else
+            {
+                UnityEngine.Debug.Log("Entry NOT Allowed");
+                //TODO play sound
+                userInput = "";
+                audioSource.PlayOneShot(accessDeniedSound);
+            }
+
+        }
+             
         
-    }
-    protected override void Interact()
-    {
-        Debug.Log("Interacted with: "+ gameObject.name);
     }
 }

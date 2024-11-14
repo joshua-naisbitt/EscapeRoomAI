@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PuzzleButton : Interactable
 {
-    public DoorController doorController;
+    public ButtonPuzzleDoorController doorController;
     public bool isPressed = false;
     private Animator animator;
 

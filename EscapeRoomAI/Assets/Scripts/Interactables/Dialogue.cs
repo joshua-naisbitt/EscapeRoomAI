@@ -1,51 +1,80 @@
+
+/*
+Josh, Wrote entire class and dialogue system
+Keoki, made the dialogue work with async and the LLM
+*/
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Dialogue : MonoBehaviour
 {
-
     private List<DialogueItem> dialogue = null;
     private int diaStep = -1;
-    private bool canAdvanceDialouge = false;
+    private bool canAdvanceDialogue = false;
     public static bool dialogueIsOpen = false;
     public KeyCode interactKey = KeyCode.E;
 
+    private TextMeshProUGUI nameText;
+    private TextMeshProUGUI mainText;
+    private TextMeshProUGUI continueText;
+    private Image characterImage;
+
+    public float characterAdvanceTime = 0.04f;
+    private string fullText;
+    private float advanceTime = 0;
+    private int charactersShown = 0;
+    private bool lastDialogue;
+
+    void Awake()
+    {
+        // Attempt to find the UI components and log errors if they are missing
+        nameText = transform.Find("Name")?.GetComponent<TextMeshProUGUI>();
+        mainText = transform.Find("Text")?.GetComponent<TextMeshProUGUI>();
+        continueText = transform.Find("ContinueText")?.GetComponent<TextMeshProUGUI>();
+        characterImage = transform.Find("Image")?.GetComponent<Image>();
+
+        if (nameText == null) Debug.LogError("Dialogue UI is missing the 'Name' TextMeshProUGUI component.");
+        if (mainText == null) Debug.LogError("Dialogue UI is missing the 'Text' TextMeshProUGUI component.");
+        if (continueText == null) Debug.LogError("Dialogue UI is missing the 'ContinueText' TextMeshProUGUI component.");
+        if (characterImage == null) Debug.LogError("Dialogue UI is missing the 'Image' component.");
+    }
+
     void Update()
     {
-        if (canAdvanceDialouge && Input.GetKeyDown(interactKey))
+        if (canAdvanceDialogue && Input.GetKeyDown(interactKey))
         {
-            bool skippedText = skipText();
+            bool skippedText = SkipText();
             if (!skippedText)
                 AdvanceDialogue();
         }
-
-        advanceText();
+        AdvanceText();
     }
 
-
-    public static void OpenDialogue(Dialoguer target)
+    public static async void OpenDialogue(Dialoguer target)
     {
-        FindObjectOfType<Dialogue>(true).StartDia(target);
+        var dialogueInstance = FindObjectOfType<Dialogue>(true);
+        dialogueInstance.gameObject.SetActive(true);
+        await dialogueInstance.StartDia(target);
     }
-    private void StartDia(Dialoguer target)
+
+    private async Task StartDia(Dialoguer target)
     {
         dialogueIsOpen = true;
-        gameObject.SetActive(true);
-
-        dialogue = target.getDialogue();
+        dialogue = await target.getDialogue();
         diaStep = -1;
-
         AdvanceDialogue();
     }
+
     private void AdvanceDialogue()
     {
         if (dialogue == null) return;
 
-        canAdvanceDialouge = false;
+        canAdvanceDialogue = false;
         diaStep++;
         if (diaStep >= dialogue.Count)
         {
@@ -55,14 +84,12 @@ public class Dialogue : MonoBehaviour
 
         DialogueItem item = dialogue[diaStep];
 
-        if (item.name != null)
-            transform.Find("Name").GetComponent<TextMeshProUGUI>().text = item.name;
-        if (item.picture != null)
-            transform.Find("Image").GetComponent<Image>().sprite = item.picture;
-        if (item.action != null)
-            item.action();
+        if (nameText != null && item.name != null)
+            nameText.text = item.name;
+        if (characterImage != null && item.picture != null)
+            characterImage.sprite = item.picture;
+        item.action?.Invoke();
 
-        // Go to next dialogue immediately if no textbox
         if (item.text == null)
         {
             fullText = "";
@@ -70,7 +97,6 @@ public class Dialogue : MonoBehaviour
             return;
         }
 
-        // Setup textbox
         lastDialogue = true;
         for (int i = diaStep + 1; i < dialogue.Count; i++)
             if (dialogue[i].text != null)
@@ -79,27 +105,20 @@ public class Dialogue : MonoBehaviour
                 break;
             }
         SetText(item.text);
-
     }
-
-    public float characterAdvanceTime = 0.04f;
-    private string fullText;
-    private float advanceTime = 0;
-    private int charactersShown = 0;
-    private bool lastDialogue;
 
     private void SetText(string full)
     {
         fullText = full;
         advanceTime = 0;
         charactersShown = 0;
-        canAdvanceDialouge = true;
-        advanceText();
-
+        canAdvanceDialogue = true;
+        AdvanceText();
     }
-    private bool skipText()
+
+    private bool SkipText()
     {
-        if (fullText == "") return false;
+        if (string.IsNullOrEmpty(fullText)) return false;
 
         if (charactersShown < fullText.Length)
         {
@@ -107,28 +126,28 @@ public class Dialogue : MonoBehaviour
             return true;
         }
         return false;
-
     }
-    private void advanceText()
+
+    private void AdvanceText()
     {
-        if (fullText == "") return;
+        // Ensure mainText and continueText are not null
+        if (mainText == null || continueText == null || string.IsNullOrEmpty(fullText)) return;
 
         advanceTime += Time.deltaTime;
-        charactersShown = Math.Max(charactersShown, (int)(advanceTime / characterAdvanceTime));
+        charactersShown = Mathf.Clamp((int)(advanceTime / characterAdvanceTime), 0, fullText.Length);
 
         if (charactersShown >= fullText.Length)
         {
-            // Complete
-            transform.Find("Text").GetComponent<TextMeshProUGUI>().text = fullText;
-            transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = lastDialogue ? "[E] done" : "[E] continue...";
+            mainText.text = fullText;
+            continueText.text = lastDialogue ? "[E] done" : "[E] continue...";
         }
         else
         {
-            transform.Find("Text").GetComponent<TextMeshProUGUI>().text = fullText.Substring(0, charactersShown);
-            transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "[E]";
+            mainText.text = fullText.Substring(0, charactersShown);
+            continueText.text = "[E]";
         }
-
     }
+
     private void FinishDia()
     {
         dialogueIsOpen = false;
@@ -136,14 +155,13 @@ public class Dialogue : MonoBehaviour
 
         dialogue = null;
         diaStep = -1;
-        canAdvanceDialouge = false;
+        canAdvanceDialogue = false;
     }
 }
 
 public interface Dialoguer
 {
-
-    List<DialogueItem> getDialogue();
+    Task<List<DialogueItem>> getDialogue();
 }
 
 public class DialogueItem
@@ -152,5 +170,4 @@ public class DialogueItem
     public string text;
     public Action action;
     public Sprite picture;
-
 }
