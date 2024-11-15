@@ -946,7 +946,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   gravity: -9.8
-  jumpHeight: 1.5
+  jumpHeight: 0.15
   sprinting: 0
   crouching: 0
   lerpCrouch: 0
@@ -3139,13 +3139,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b69a1f414f9344588e5709a9bc5d05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  promptMessage: Interact
-  objectName: 
-  isPickupable: 0
-  isInPocket: 0
-  isPuzzleElement: 0
-  puzzleCode: 0
-  player: {fileID: 0}
 --- !u!1 &619484953
 GameObject:
   m_ObjectHideFlags: 0

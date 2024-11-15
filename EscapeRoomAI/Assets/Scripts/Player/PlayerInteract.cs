@@ -8,17 +8,28 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField] private float distance = 3f;
     [SerializeField] private LayerMask mask;
     private PlayerUI playerUI;
+    private Interactable winston;
+    // Uncommment line below to use input manager: 
+
+    //private InputManager inputManager;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        winston = GameObject.FindGameObjectWithTag("Winston").GetComponent<Interactable>();
         cam = GetComponent<PlayerLook>().cam;
         playerUI = GetComponent<PlayerUI>();
+        // Uncommment line below to use input manager: 
+        // inputManager = GetComponent<InputManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Q)){
+            winston.BaseInteract();
+        }
         playerUI.UpdateText(string.Empty);  // Clear prompt each frame
 
         // Set up ray for detecting interactable objects in front of the player
@@ -40,6 +51,11 @@ public class PlayerInteract : MonoBehaviour
                 {
                     interactable.BaseInteract();
                 }
+                // Uncommment block below and comment block above to use input manager
+                // if (inputManager.onFoot.Interact.triggered)
+                // {
+                //     interactable.BaseInteract();
+                // }
             }
         }
     }
