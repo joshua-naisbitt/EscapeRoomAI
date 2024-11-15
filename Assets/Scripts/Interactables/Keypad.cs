@@ -20,13 +20,14 @@ public class Keypad : Interactable
     }
     protected override void Interact()
     { 
-        if (isPickupable == true) { //& isInPocket = false){
-        Debug.Log("Interacted with: "+ objectName);
-        InventoryManager.Instance.Add(Item);
-        Destroy(gameObject);
-        }
-        else{
+        // if (isPickupable == true) { //& isInPocket = false){
+        // Debug.Log("Interacted with: "+ objectName);
+        
+        // InventoryManager.Instance.Add(Item);
+        // Destroy(gameObject);
+        // }
+        // else{
 
-        }
+        // }
     }
 }

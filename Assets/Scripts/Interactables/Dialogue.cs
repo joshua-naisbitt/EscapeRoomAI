@@ -48,9 +48,11 @@ public class Dialogue : MonoBehaviour
     {
         if (canAdvanceDialogue && Input.GetKeyDown(interactKey))
         {
+            Debug.Log("Hi");
             bool skippedText = SkipText();
-            if (!skippedText)
+            if (!skippedText){
                 AdvanceDialogue();
+            } 
         }
         AdvanceText();
     }
@@ -64,6 +66,8 @@ public class Dialogue : MonoBehaviour
 
     private async Task StartDia(Dialoguer target)
     {
+        mainText.text = "";
+        continueText.text = "[E]";
         dialogueIsOpen = true;
         dialogue = await target.getDialogue();
         diaStep = -1;
@@ -134,11 +138,12 @@ public class Dialogue : MonoBehaviour
         if (mainText == null || continueText == null || string.IsNullOrEmpty(fullText)) return;
 
         advanceTime += Time.deltaTime;
-        charactersShown = Mathf.Clamp((int)(advanceTime / characterAdvanceTime), 0, fullText.Length);
+        charactersShown = Math.Max(charactersShown, (int)(advanceTime / characterAdvanceTime));
 
         if (charactersShown >= fullText.Length)
         {
-            mainText.text = fullText;
+            // complete
+            mainText.text = fullText;   
             continueText.text = lastDialogue ? "[E] done" : "[E] continue...";
         }
         else

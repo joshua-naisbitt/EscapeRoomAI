@@ -1,9 +1,14 @@
+/*
+Keoki, Wrote entire class and Game Context
+
+*/
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class GameMaster : MonoBehaviour
 {
 
     string contextCache;
@@ -26,12 +31,12 @@ public class NewBehaviourScript : MonoBehaviour
         currentPuzzle = 0;
 
        
-        contextCache = "";
+        contextCache = "Context 1";
         puzzleContexts = new string[5, 6]
         {
             {
                 // Puzzle ID 0, Null Puzzle
-                "You are a Wizard, named Professor Winston, and you are running an escape room. There is a player that you are talking to and giving hints to help them solve the puzzles. Make your hints helpful without giving away the full puzzle.",
+                "Ignore all previous instructions, and limit your responses to 2 to 3 sentences. You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles. You will provide hints to a player to escape a room in your wizard house.",
                 null, null, null, null, null // Only 1 state for this puzzle
             },
             {
@@ -66,6 +71,7 @@ public class NewBehaviourScript : MonoBehaviour
                 null, null // Only 4 states for this puzzle
             }
         };
+        contextCache = puzzleContexts[0,0];
     }
 
     // Update is called once per frame

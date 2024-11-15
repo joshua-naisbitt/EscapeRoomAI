@@ -1,3 +1,7 @@
+/*
+Keoki, Wrote class as a base for interactables, not used.
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -5,7 +9,6 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    public Item Item;
     public string promptMessage; //message that displays when interacted
     public string objectName; //Name of object
     public bool isPickupable; //can be put into inventory
@@ -58,9 +61,9 @@ public class Interactable : MonoBehaviour
 
     public void Pickup()
     {
-        InventoryManager.Instance.Add(Item);
-        Destroy(gameObject);
-        
+        UnityEngine.Debug.Log("Picked up " + objectName);
+        // Add object to Inventory
+      //  gameObject.SetActive(false); // Disable the object in the scene after pickup
     }
 
     public void SolvePuzzle()
