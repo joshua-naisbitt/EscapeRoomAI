@@ -52,7 +52,7 @@ void Start()
      void Update()
     {
         // Check if "Q" key is pressed
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             ToggleInventory();
         }
