@@ -48,7 +48,7 @@ public class Dialogue : MonoBehaviour
     {
         if (canAdvanceDialogue && Input.GetKeyDown(interactKey))
         {
-            Debug.Log("Hi");
+          //  Debug.Log("Hi");
             bool skippedText = SkipText();
             if (!skippedText){
                 AdvanceDialogue();

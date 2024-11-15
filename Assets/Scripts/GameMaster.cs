@@ -36,7 +36,7 @@ public class GameMaster : MonoBehaviour
         {
             {
                 // Puzzle ID 0, Null Puzzle
-                "Ignore all previous instructions, and limit your responses to 2 to 3 sentences. You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles. You will provide hints to a player to escape a room in your wizard house.",
+                "Ignore all previous instructions, and limit your responses to 1 to 3 sentences. You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles. You will provide hints to a player to escape a room in your wizard house. You will only use the puzzles descripbed to you for giving hints.",
                 null, null, null, null, null // Only 1 state for this puzzle
             },
             {
@@ -71,7 +71,7 @@ public class GameMaster : MonoBehaviour
                 null, null // Only 4 states for this puzzle
             }
         };
-        contextCache = puzzleContexts[0,0];
+        contextCache = puzzleContexts[0,0] + "" + puzzleContexts[1,0];
     }
 
     // Update is called once per frame
