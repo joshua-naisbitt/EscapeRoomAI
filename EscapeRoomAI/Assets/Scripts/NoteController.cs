@@ -112,7 +112,7 @@ public class NoteInteractable : Interactable
     private void Update()
     {
         // Check if the note is open and the close key is pressed
-        if (isNoteOpen && Input.GetKeyDown(closeKey))
+        if (isNoteOpen && ( Input.GetKeyDown(closeKey) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Q)))
         {
             CloseNote();
         }

@@ -5,12 +5,12 @@ using UnityEngine;
 public class PlayerLook : MonoBehaviour
 {
     public Camera cam;
-    private float xRotation = 0f;
-    public float xSensitivity = 30f;
-    public float ySensitivity = 30f;
+    private float xRotation = 30f;
+    public float xSensitivity = 600f;
+    public float ySensitivity = 600f;
     private Vector2 currentRotation;
     private Vector2 rotationVelocity;
-    public float smoothTime = 0.1f;
+    public float smoothTime = 0.5f;
     void Start()
     {
         // Lock the cursor to the center of the screen

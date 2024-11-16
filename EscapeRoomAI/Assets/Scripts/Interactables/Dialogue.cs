@@ -4,15 +4,8 @@ Josh, Wrote entire class and dialogue system
 Keoki, made the dialogue work with async and the LLM
 */
 
-
-/*
-Josh, Wrote entire class and dialogue system
-Keoki, made the dialogue work with async and the LLM
-*/
-
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -22,7 +15,6 @@ public class Dialogue : MonoBehaviour
 {
     private List<DialogueItem> dialogue = null;
     private int diaStep = -1;
-    private bool canAdvanceDialogue = false;
     private bool canAdvanceDialogue = false;
     public static bool dialogueIsOpen = false;
     public KeyCode interactKey = KeyCode.E;
@@ -52,36 +44,11 @@ public class Dialogue : MonoBehaviour
         if (characterImage == null) Debug.LogError("Dialogue UI is missing the 'Image' component.");
     }
 
-    private TextMeshProUGUI nameText;
-    private TextMeshProUGUI mainText;
-    private TextMeshProUGUI continueText;
-    private Image characterImage;
-
-    public float characterAdvanceTime = 0.04f;
-    private string fullText;
-    private float advanceTime = 0;
-    private int charactersShown = 0;
-    private bool lastDialogue;
-
-    void Awake()
-    {
-        // Attempt to find the UI components and log errors if they are missing
-        nameText = transform.Find("Name")?.GetComponent<TextMeshProUGUI>();
-        mainText = transform.Find("Text")?.GetComponent<TextMeshProUGUI>();
-        continueText = transform.Find("ContinueText")?.GetComponent<TextMeshProUGUI>();
-        characterImage = transform.Find("Image")?.GetComponent<Image>();
-
-        if (nameText == null) Debug.LogError("Dialogue UI is missing the 'Name' TextMeshProUGUI component.");
-        if (mainText == null) Debug.LogError("Dialogue UI is missing the 'Text' TextMeshProUGUI component.");
-        if (continueText == null) Debug.LogError("Dialogue UI is missing the 'ContinueText' TextMeshProUGUI component.");
-        if (characterImage == null) Debug.LogError("Dialogue UI is missing the 'Image' component.");
-    }
-
     void Update()
     {
         if (canAdvanceDialogue && Input.GetKeyDown(interactKey))
-        if (canAdvanceDialogue && Input.GetKeyDown(interactKey))
         {
+          //  Debug.Log("Hi");
             bool skippedText = SkipText();
             if (!skippedText){
                 AdvanceDialogue();
@@ -91,17 +58,11 @@ public class Dialogue : MonoBehaviour
     }
 
     public static async void OpenDialogue(Dialoguer target)
-    public static async void OpenDialogue(Dialoguer target)
     {
         var dialogueInstance = FindObjectOfType<Dialogue>(true);
         dialogueInstance.gameObject.SetActive(true);
         await dialogueInstance.StartDia(target);
-        var dialogueInstance = FindObjectOfType<Dialogue>(true);
-        dialogueInstance.gameObject.SetActive(true);
-        await dialogueInstance.StartDia(target);
     }
-
-    private async Task StartDia(Dialoguer target)
 
     private async Task StartDia(Dialoguer target)
     {
@@ -109,17 +70,14 @@ public class Dialogue : MonoBehaviour
         continueText.text = "[E]";
         dialogueIsOpen = true;
         dialogue = await target.getDialogue();
-        dialogue = await target.getDialogue();
         diaStep = -1;
         AdvanceDialogue();
     }
-
 
     private void AdvanceDialogue()
     {
         if (dialogue == null) return;
 
-        canAdvanceDialogue = false;
         canAdvanceDialogue = false;
         diaStep++;
         if (diaStep >= dialogue.Count)
@@ -130,11 +88,6 @@ public class Dialogue : MonoBehaviour
 
         DialogueItem item = dialogue[diaStep];
 
-        if (nameText != null && item.name != null)
-            nameText.text = item.name;
-        if (characterImage != null && item.picture != null)
-            characterImage.sprite = item.picture;
-        item.action?.Invoke();
         if (nameText != null && item.name != null)
             nameText.text = item.name;
         if (characterImage != null && item.picture != null)
@@ -165,15 +118,10 @@ public class Dialogue : MonoBehaviour
         charactersShown = 0;
         canAdvanceDialogue = true;
         AdvanceText();
-        canAdvanceDialogue = true;
-        AdvanceText();
     }
 
     private bool SkipText()
-
-    private bool SkipText()
     {
-        if (string.IsNullOrEmpty(fullText)) return false;
         if (string.IsNullOrEmpty(fullText)) return false;
 
         if (charactersShown < fullText.Length)
@@ -185,16 +133,12 @@ public class Dialogue : MonoBehaviour
     }
 
     private void AdvanceText()
-
-    private void AdvanceText()
     {
-        // Ensure mainText and continueText are not null
-        if (mainText == null || continueText == null || string.IsNullOrEmpty(fullText)) return;
         // Ensure mainText and continueText are not null
         if (mainText == null || continueText == null || string.IsNullOrEmpty(fullText)) return;
 
         advanceTime += Time.deltaTime;
-        charactersShown = Mathf.Clamp((int)(advanceTime / characterAdvanceTime), 0, fullText.Length);
+        charactersShown = Math.Max(charactersShown, (int)(advanceTime / characterAdvanceTime));
 
         if (charactersShown >= fullText.Length)
         {
@@ -206,11 +150,8 @@ public class Dialogue : MonoBehaviour
         {
             mainText.text = fullText.Substring(0, charactersShown);
             continueText.text = "[E]";
-            mainText.text = fullText.Substring(0, charactersShown);
-            continueText.text = "[E]";
         }
     }
-
 
     private void FinishDia()
     {
@@ -220,13 +161,11 @@ public class Dialogue : MonoBehaviour
         dialogue = null;
         diaStep = -1;
         canAdvanceDialogue = false;
-        canAdvanceDialogue = false;
     }
 }
 
 public interface Dialoguer
 {
-    Task<List<DialogueItem>> getDialogue();
     Task<List<DialogueItem>> getDialogue();
 }
 

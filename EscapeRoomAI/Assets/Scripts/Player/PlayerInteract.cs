@@ -17,7 +17,7 @@ public class PlayerInteract : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        winston = GameObject.FindGameObjectWithTag("Winston").GetComponent<Interactable>();
+      winston = GameObject.FindGameObjectWithTag("Winston").GetComponent<Interactable>();
         cam = GetComponent<PlayerLook>().cam;
         playerUI = GetComponent<PlayerUI>();
         // Uncommment line below to use input manager: 
@@ -28,7 +28,7 @@ public class PlayerInteract : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Q)){
-            winston.BaseInteract();
+        winston.BaseInteract();
         }
         playerUI.UpdateText(string.Empty);  // Clear prompt each frame
 
