@@ -27,23 +27,23 @@ public class LLMHandler : MonoBehaviour
     // Async method for starting LLM response
     private async void StartLLMResponse()
     {
-        var prompt = "Ignore all previous instructions, and limit your responses to 2 to 3 sentences. You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles. You will provide hints to a player to escape a room in your wizard house.";
+        var prompt = "Ignore all previous instructions, and limit your responses to 1 to 3 sentences. You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles. You will provide hints to a player to escape a room in your wizard house. You will only use the puzzles descripbed to you for giving hints.";
 
         var response = await GetChatGPTResponse(prompt);
-        //UnityEngine.Debug.Log("Assistant Response: " + response);
+     //UnityEngine.Debug.Log("Assistant Response: " + response);
 
     }
 
     // Main method
-    public async Task<string> SendMessageToWinston(string prompt)
-    {
+   public async Task<string> SendMessageToWinston(string prompt)
+   {
 
         var response = await GetChatGPTResponse(prompt);
 
         return response;
         //UnityEngine.Debug.Log("Assistant Response: " + response);
 
-    }
+   }
     public static async Task<string> GetChatGPTResponse(string prompt)
     {
         using (var client = new HttpClient())
@@ -69,7 +69,7 @@ public class LLMHandler : MonoBehaviour
                 var responseString = await response.Content.ReadAsStringAsync();
 
                 // print raw response for debugging
-                UnityEngine.Debug.Log("Raw API Response: " + responseString);
+                //UnityEngine.Debug.Log("Raw API Response: " + responseString);
 
                 if (response.IsSuccessStatusCode)
                 {

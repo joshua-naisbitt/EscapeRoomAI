@@ -1,7 +1,15 @@
-using System.Collections.Generic;
-using UnityEngine;
+/*
+Written by Thrinh
+Keoki added in Dialoguer function 
+*/
 
-public class RotateWheelDoorController : Interactable
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+
+public class RotateWheelDoorController : Interactable, Dialoguer
 {
     private Animator animator;
     private bool isOpen = false;
@@ -17,11 +25,18 @@ public class RotateWheelDoorController : Interactable
     public AudioClip unlockSound;
     private AudioSource audioSource;
 
+    private GameObject player;
+    public Sprite dialogueIcon;
+    private InputManager playerIM;
+
     void Start()
     {
+        //targetCombination = {4,2,0};
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerIM = player?.GetComponent<InputManager>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>(); // Ensure the AudioSource is attached to this GameObject
-        promptMessage = "Solve the rotate wheel puzzle to open the door";
+        promptMessage = "The door is locked. Solve the rotate wheel puzzle to unlock it.";
 
         // Subscribe to the rotate wheel puzzle event
         Rotate.Rotated += OnWheelRotated;
@@ -35,9 +50,27 @@ public class RotateWheelDoorController : Interactable
             animator.SetBool("isOpen", isOpen);
         }
         else
+        { //door locked
+
+        if (playerIM.playerCanMove)
         {
-            Debug.Log("The door is locked. Solve the rotate wheel puzzle to unlock it.");
+            playerIM.playerCanMove = false;
+            Dialogue.OpenDialogue(this);
+        }            
+
         }
+    }
+
+    
+     public async Task<List<DialogueItem>> getDialogue()
+    {
+
+        return new List<DialogueItem>()
+        {
+            new DialogueItem() { name = "Winston", picture = dialogueIcon },
+            new DialogueItem() { text = promptMessage },
+            new DialogueItem() { action = () => { playerIM.playerCanMove = true; } }
+        };
     }
 
     private void OnWheelRotated(string wheelName, int numberShown)
@@ -84,8 +117,12 @@ public class RotateWheelDoorController : Interactable
             {
                 audioSource.PlayOneShot(unlockSound);
             }
-
-            Debug.Log("All wheels are in the correct position! The door is now unlocked.");
+             promptMessage = "Great Job! All wheels are in the correct position! The door is now unlocked.";
+                if (playerIM.playerCanMove)
+                {
+                    playerIM.playerCanMove = false;
+                    Dialogue.OpenDialogue(this);
+                }             
         }
     }
 

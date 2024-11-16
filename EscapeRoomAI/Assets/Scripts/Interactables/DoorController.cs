@@ -1,16 +1,32 @@
-using UnityEngine;
+/*
+Written by Thrinh
+Keoki added in Dialoguer function 
+*/
 
-public class DoorController : Interactable
+
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
+public class DoorController : Interactable, Dialoguer
 {
     private Animator animator;
     private bool isOpen = false;
     private bool isUnlocked = false;
+
+        private GameObject player;
+    public Sprite dialogueIcon;
+    private InputManager playerIM;
 
     public PuzzleButton[] buttonSequence; // Array to hold the buttons in the correct order
     private int currentButtonIndex = 0; // Tracks which button in the sequence should be pressed next
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerIM = player?.GetComponent<InputManager>();
+
         animator = GetComponent<Animator>();
         promptMessage = "Solve the puzzle to open the door";
     }
@@ -24,8 +40,24 @@ public class DoorController : Interactable
         }
         else
         {
+             if (playerIM.playerCanMove)
+        {
+            playerIM.playerCanMove = false;
+            Dialogue.OpenDialogue(this);
+        }
             Debug.Log("The door is locked. Solve the puzzle to unlock it.");
         }
+    }
+
+    public async Task<List<DialogueItem>> getDialogue()
+    {
+
+        return new List<DialogueItem>()
+        {
+            new DialogueItem() { name = "Winston", picture = dialogueIcon },
+            new DialogueItem() { text = promptMessage },
+            new DialogueItem() { action = () => { playerIM.playerCanMove = true; } }
+        };
     }
 
     public void VerifyButtonOrder(PuzzleButton button)

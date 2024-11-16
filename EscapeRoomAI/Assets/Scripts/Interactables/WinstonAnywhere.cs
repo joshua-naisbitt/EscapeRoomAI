@@ -43,8 +43,8 @@ public class WinstonAnywhere : Interactable, Dialoguer
     {
         string gameContext = GM?.GenerateGameContext() ?? "Default game context";
         // add in 
-        string winstonMessage = await (LLM?.SendMessageToWinston("This is the current Game state:  " + gameContext) ?? Task.FromResult("Error retrieving message from LLM."));
-
+        string winstonMessage = await (LLM?.SendMessageToWinston("This is the current Game state:  " +gameContext) ?? Task.FromResult("Error retrieving message from LLM."));
+        UnityEngine.Debug.Log("Winston: " + winstonMessage);
         return new List<DialogueItem>()
         {
             new DialogueItem() { name = "Prof. Winston", picture = dialogueIcon },
