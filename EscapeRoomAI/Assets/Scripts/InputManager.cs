@@ -19,7 +19,7 @@ public class InputManager : MonoBehaviour // MonoBehavior is a base class in Uni
 
         motor = GetComponent<PlayerMotor>(); // fetches the PlayerMotor component attached to the same GameObject, after getting the reference to the PlayerMotor, you can call methods from the PlayerMotor script, such as ProcessMove()
         look = GetComponent<PlayerLook>();
-        onFoot.Jump.performed += ctx => motor.Jump();
+        //onFoot.Jump.performed += ctx => motor.Jump();
 
         onFoot.Crouch.performed += ctx => motor.Crouch();
         onFoot.Sprint.performed += ctx => motor.Sprint();

@@ -6,7 +6,8 @@ public class PlayerMotor : MonoBehaviour
 {
     private CharacterController controller;
     private Vector3 playerVelocity;
-    public float speed = 5f;
+    public float walkSpeed = 7f;  // Normal walking speed
+    public float sprintSpeed = 12f;  // Sprinting speed
     private bool isGrounded;
     public float gravity = -9.8f;
     public float jumpHeight = 1.5f;
@@ -19,7 +20,7 @@ public class PlayerMotor : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
     }
-     
+
 
 
     // Update is called once per frame
@@ -41,7 +42,7 @@ public class PlayerMotor : MonoBehaviour
                 controller.height = Mathf.Lerp(controller.height, 2, p);
             }
 
-            if(p> 1)
+            if (p > 1)
             {
                 lerpCrouch = false;
                 crouchTimer = 0f;
@@ -51,14 +52,28 @@ public class PlayerMotor : MonoBehaviour
 
     public void ProcessMove(Vector2 input)
     {
-        Vector3 moveDirection = Vector3.zero;
-        moveDirection.x = input.x;
-        moveDirection.z = input.y;
-        controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
-        playerVelocity.y += gravity * Time.deltaTime;
-        if(isGrounded && playerVelocity.y < 0) { playerVelocity.y = -2f;} // when the player is on the ground, the vertical velocity is reset to a small negative value -2f
-        controller.Move(playerVelocity * Time.deltaTime); // after applying gravity, this line moves the player vertically based on the value of playerVelocity.y 
+        // Calculate the target direction based on player input
+        Vector3 targetDirection = transform.TransformDirection(new Vector3(input.x, 0, input.y));
+
+        // Set the target speed based on the sprinting state
+        float targetSpeed = sprinting ? sprintSpeed : walkSpeed;
+        Vector3 targetVelocity = targetDirection * targetSpeed;
+
+        // Smoothly interpolate between current velocity and target velocity
+        Vector3 smoothedVelocity = Vector3.Lerp(controller.velocity, targetVelocity, Time.deltaTime * 20f);
+
+        // Apply movement
+        controller.Move(smoothedVelocity * Time.deltaTime);
+
+        // Apply gravity
+        if (isGrounded && playerVelocity.y < 0)
+        {
+            playerVelocity.y = -2f; // Reset gravity effect when grounded
+        }
+        playerVelocity.y += gravity * Time.deltaTime; // Add gravity
+        controller.Move(new Vector3(0, playerVelocity.y, 0) * Time.deltaTime); // Apply vertical movement
     }
+
     public void Crouch()
     {
         crouching = !crouching;
@@ -67,24 +82,16 @@ public class PlayerMotor : MonoBehaviour
 
     }
 
-    public void Sprint() // toggle between sprinting speed and walking speed
+    public void Sprint()
     {
-        sprinting = !sprinting;
-        if (sprinting)
-        {
-            speed = 8;
-        }
-        else
-        {
-            speed = 5;
-        }
+        sprinting = !sprinting; // Toggle sprint state
     }
 
-    public void Jump()
-    {
-        if (isGrounded) // can only jump when the player is on the ground
-        {
-            playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravity);
-        }
-    }
+    //public void Jump()
+    //{
+    //    if (isGrounded) // can only jump when the player is on the ground
+    //    {
+    //        playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravity);
+    //    }
+    //}
 }

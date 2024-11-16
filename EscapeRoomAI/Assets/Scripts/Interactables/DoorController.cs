@@ -28,7 +28,7 @@ public class DoorController : Interactable, Dialoguer
         playerIM = player?.GetComponent<InputManager>();
 
         animator = GetComponent<Animator>();
-        promptMessage = "Solve the puzzle to open the door";
+        promptMessage = "Press to open/close the door";
     }
 
     protected override void Interact()

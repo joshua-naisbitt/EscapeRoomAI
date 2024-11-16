@@ -4,25 +4,38 @@ using UnityEngine;
 
 public class PlayerLook : MonoBehaviour
 {
-    // Start is called before the first frame update
     public Camera cam;
     private float xRotation = 0f;
     public float xSensitivity = 30f;
     public float ySensitivity = 30f;
+    private Vector2 currentRotation;
+    private Vector2 rotationVelocity;
+    public float smoothTime = 0.1f;
+    void Start()
+    {
+        // Lock the cursor to the center of the screen
+        Cursor.lockState = CursorLockMode.Locked;
+
+        // Hide the cursor
+        Cursor.visible = false;
+    }
+
 
     public void ProcessLook(Vector2 input)
     {
-        float mouseX = input.x;
-        float mouseY = input.y;
+        // Reverse the input.y to fix the inverted vertical rotation
+        float targetX = currentRotation.x - input.y * ySensitivity * Time.deltaTime; // Subtract input.y
+        float targetY = currentRotation.y + input.x * ySensitivity * Time.deltaTime;
 
-        // Accumulate vertical rotation over time
-        xRotation -= (mouseY * Time.deltaTime) * ySensitivity;
-        xRotation = Mathf.Clamp(xRotation, -80f, 80f);
+        // Smoothly interpolate rotation values
+        currentRotation.x = Mathf.SmoothDamp(currentRotation.x, targetX, ref rotationVelocity.x, smoothTime);
+        currentRotation.y = Mathf.SmoothDamp(currentRotation.y, targetY, ref rotationVelocity.y, smoothTime);
 
-        // Apply vertical rotation to the camera
+        // Clamp vertical rotation
+        xRotation = Mathf.Clamp(currentRotation.x, -80f, 80f);
+
+        // Apply rotations to the camera and the player
         cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-
-        // Apply horizontal rotation to the player
-        transform.Rotate(Vector3.up * (mouseX * Time.deltaTime) * xSensitivity);
+        transform.localRotation = Quaternion.Euler(0, currentRotation.y, 0);
     }
 }

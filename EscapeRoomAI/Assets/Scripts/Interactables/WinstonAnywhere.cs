@@ -3,36 +3,60 @@ Josh, Wrote the class
 Keoki, made the dialogue work with async and the LLM and Game master
 */
 
+/*
+Josh, Wrote the class
+Keoki, made the dialogue work with async and the LLM and Game master
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class WinstonAnywhere : Interactable, Dialoguer
+public class WinstonAnywhere : MonoBehaviour, Dialoguer
 {
+    private GameObject player;
     private GameObject player;
     public Sprite dialogueIcon;
     private InputManager playerIM;
+    private InputManager playerIM;
     private GameObject ChatObject;
+    private GameObject GameMasterObject;
     private GameObject GameMasterObject;
     private LLMHandler LLM;
     private GameMaster GM;
+
+    [Header("Trigger Settings")]
+    [SerializeField] private KeyCode triggerKey = KeyCode.T; // Key to trigger Winston dialogue
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerIM = player?.GetComponent<InputManager>();
+        playerIM = player?.GetComponent<InputManager>();
 
         ChatObject = GameObject.FindGameObjectWithTag("LLMObj");
         LLM = ChatObject?.GetComponent<LLMHandler>();
 
+        LLM = ChatObject?.GetComponent<LLMHandler>();
+
         GameMasterObject = GameObject.FindGameObjectWithTag("GameMasterObj");
+        GM = GameMasterObject?.GetComponent<GameMaster>();
         GM = GameMasterObject?.GetComponent<GameMaster>();
     }
 
-    protected override void Interact()
+    void Update()
     {
-        if (playerIM.playerCanMove)
+        // Trigger dialogue on key press
+        if (Input.GetKeyDown(triggerKey))
+        {
+            TriggerDialogue();
+        }
+    }
+
+    private void TriggerDialogue()
+    {
+        if (playerIM != null && playerIM.playerCanMove)
         {
             playerIM.playerCanMove = false;
             Dialogue.OpenDialogue(this);
