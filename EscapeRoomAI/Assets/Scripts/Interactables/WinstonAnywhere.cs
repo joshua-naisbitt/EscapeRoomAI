@@ -12,9 +12,9 @@ public class WinstonAnywhere : Interactable, Dialoguer
     public Sprite dialogueIcon;
     private InputManager playerIM;
     private GameObject chatObject;
-    private GameObject gameMasterObject;
+   // private GameObject gameMasterObject;
     private LLMHandler llm;
-    private GameMaster gm;
+  //  private GameMaster gm;
     private InputScript inputScript;
     private GameObject inputField;
 
@@ -38,8 +38,8 @@ public class WinstonAnywhere : Interactable, Dialoguer
         chatObject = GameObject.FindGameObjectWithTag("LLMObj");
         llm = chatObject?.GetComponent<LLMHandler>();
 
-        gameMasterObject = GameObject.FindGameObjectWithTag("GameMasterObj");
-        gm = gameMasterObject?.GetComponent<GameMaster>();
+     //   gameMasterObject = GameObject.FindGameObjectWithTag("GameMasterObj");
+      //  gm = gameMasterObject?.GetComponent<GameMaster>();
     }
 
     protected override void Interact()
@@ -54,8 +54,8 @@ public class WinstonAnywhere : Interactable, Dialoguer
 
     public async Task<List<DialogueItem>> getDialogue()
 {
-    string gameContext = gm?.GenerateGameContext() ?? "Default game context";
-
+    string gameContext = llm.prompt;// gm?.GenerateGameContext() ?? "Default game context";
+    //Debug.Log(gameContext);
     // Retrieve initial message from Winston
     string initialMessage = await (llm?.SendMessageToWinston($"Give a greeting to the player, they will ask a quastion after this")
                                   ?? Task.FromResult("Error retrieving message from LLM."));
@@ -79,7 +79,7 @@ public class WinstonAnywhere : Interactable, Dialoguer
 
             // Process player input with LLM
             string responseMessage = await (llm?.SendMessageToWinston(
-                $"This is the current game state: {gameContext}. Here is what the player said: {playerInput}")
+                $" Here is what the player said: {playerInput}")
                 ?? Task.FromResult("Error retrieving response from LLM."));
 
             Debug.Log("Input from Winston: " + responseMessage);
