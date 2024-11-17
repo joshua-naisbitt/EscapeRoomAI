@@ -7,6 +7,8 @@ TagManager:
   - Winston
   - LLMObj
   - GameMasterObj
+  - DialogueTextBox
+  - TestTextBoxTag
   layers:
   - Default
   - TransparentFX

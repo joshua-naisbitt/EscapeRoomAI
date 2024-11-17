@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class Readinput : MonoBehaviour
 {
+    public string input;
     // Start is called before the first frame update
     void Start()
     {
+
         
     }
 
@@ -14,5 +16,11 @@ public class NewBehaviourScript : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void readStringInput(string s){
+
+    input = s;
+    Debug.Log(input);
     }
 }

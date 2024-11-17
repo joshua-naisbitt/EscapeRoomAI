@@ -17,7 +17,7 @@ public class Dialogue : MonoBehaviour
     private int diaStep = -1;
     private bool canAdvanceDialogue = false;
     public static bool dialogueIsOpen = false;
-    public KeyCode interactKey = KeyCode.E;
+    public KeyCode interactKey = KeyCode.Return; // Changed to Enter key
 
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI mainText;
@@ -48,11 +48,11 @@ public class Dialogue : MonoBehaviour
     {
         if (canAdvanceDialogue && Input.GetKeyDown(interactKey))
         {
-          //  Debug.Log("Hi");
             bool skippedText = SkipText();
-            if (!skippedText){
+            if (!skippedText)
+            {
                 AdvanceDialogue();
-            } 
+            }
         }
         AdvanceText();
     }
@@ -67,7 +67,7 @@ public class Dialogue : MonoBehaviour
     private async Task StartDia(Dialoguer target)
     {
         mainText.text = "";
-        continueText.text = "[E]";
+        continueText.text = "[Enter]"; // Updated text to reflect Enter key
         dialogueIsOpen = true;
         dialogue = await target.getDialogue();
         diaStep = -1;
@@ -143,13 +143,13 @@ public class Dialogue : MonoBehaviour
         if (charactersShown >= fullText.Length)
         {
             // complete
-            mainText.text = fullText;   
-            continueText.text = lastDialogue ? "[E] done" : "[E] continue...";
+            mainText.text = fullText;
+            continueText.text = lastDialogue ? "[Enter] done" : "[Enter] continue..."; // Updated for Enter key
         }
         else
         {
             mainText.text = fullText.Substring(0, charactersShown);
-            continueText.text = "[E]";
+            continueText.text = "[Enter]"; // Updated for Enter key
         }
     }
 
@@ -176,3 +176,4 @@ public class DialogueItem
     public Action action;
     public Sprite picture;
 }
+

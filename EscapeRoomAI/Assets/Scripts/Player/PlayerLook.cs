@@ -11,18 +11,35 @@ public class PlayerLook : MonoBehaviour
     private Vector2 currentRotation;
     private Vector2 rotationVelocity;
     public float smoothTime = 0.5f;
+
     void Start()
     {
-        // Lock the cursor to the center of the screen
+        // Hide the cursor and lock it at the start
         Cursor.lockState = CursorLockMode.Locked;
-
-        // Hide the cursor
         Cursor.visible = false;
     }
 
+    void Update()
+    {
+        // Update cursor state based on dialogue status
+        if (Dialogue.dialogueIsOpen)
+        {
+            // Show cursor and unlock it during dialogue
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            // Hide cursor and lock it when dialogue is not active
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
 
     public void ProcessLook(Vector2 input)
     {
+        if (Dialogue.dialogueIsOpen) return; // Disable look movement during dialogue
+
         // Reverse the input.y to fix the inverted vertical rotation
         float targetX = currentRotation.x - input.y * ySensitivity * Time.deltaTime; // Subtract input.y
         float targetY = currentRotation.y + input.x * ySensitivity * Time.deltaTime;

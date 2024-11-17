@@ -28,6 +28,7 @@ public class PlayerInteract : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Q)){
+
         winston.BaseInteract();
         }
         playerUI.UpdateText(string.Empty);  // Clear prompt each frame
