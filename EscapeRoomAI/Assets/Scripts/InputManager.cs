@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour // MonoBehavior is a base class in Unity from which all scripts that interact with the Unity engine must inherit. it provides access to Unity's core features and allows scripts to be attacked to GameObjects in a Unity scene
+public class InputManager : MonoBehaviour // MonoBehavior is a base class in Unity from which all scripts that interact with the Unity engine must inherit. it provides access to Unity's core features and allows scripts to be attached to GameObjects in a Unity scene
 {
     // Start is called before the first frame update
     private PlayerInput playerInput;

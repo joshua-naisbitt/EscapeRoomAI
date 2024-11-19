@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class WinstonAnywhere : Interactable, Dialoguer
 {
+    private PromptDB promptdb;
     private GameObject player;
     public Sprite dialogueIcon;
     private InputManager playerIM;
@@ -23,6 +24,7 @@ public class WinstonAnywhere : Interactable, Dialoguer
 
     void Start()
     {
+        promptdb = new PromptDB();
         resp = "default";
         player = GameObject.FindGameObjectWithTag("Player");
         playerIM = player?.GetComponent<InputManager>();
@@ -57,7 +59,7 @@ public class WinstonAnywhere : Interactable, Dialoguer
     string gameContext = llm.prompt;// gm?.GenerateGameContext() ?? "Default game context";
     //Debug.Log(gameContext);
     // Retrieve initial message from Winston
-    string initialMessage = await (llm?.SendMessageToWinston($"Give a greeting to the player, they will ask a quastion after this")
+    string initialMessage = await (llm?.SendMessageToWinston($"Give a greeting to the person, they will ask a quastion after this")
                                   ?? Task.FromResult("Error retrieving message from LLM."));
 
     // Prepare the initial dialogue items
@@ -65,7 +67,7 @@ public class WinstonAnywhere : Interactable, Dialoguer
     {
         new DialogueItem() { name = "Prof. Winston", picture = dialogueIcon },
         new DialogueItem() { text = initialMessage }, // Winston's initial message
-        new DialogueItem() { text = "What can I help you with today?" }
+        new DialogueItem() { text = promptdb.prompts[1] }
     };
 
     // Add an action to wait for player input and process it
@@ -79,7 +81,9 @@ public class WinstonAnywhere : Interactable, Dialoguer
 
             // Process player input with LLM
             string responseMessage = await (llm?.SendMessageToWinston(
-                $" Here is what the player said: {playerInput}")
+                $@"{promptdb.prompts[0]}
+
+Respond to this: {playerInput}")
                 ?? Task.FromResult("Error retrieving response from LLM."));
 
             Debug.Log("Input from Winston: " + responseMessage);
