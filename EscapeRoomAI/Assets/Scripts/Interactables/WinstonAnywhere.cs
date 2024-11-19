@@ -67,7 +67,6 @@ public class WinstonAnywhere : Interactable, Dialoguer
     {
         new DialogueItem() { name = "Prof. Winston", picture = dialogueIcon },
         new DialogueItem() { text = initialMessage }, // Winston's initial message
-        new DialogueItem() { text = promptdb.prompts[1] }
     };
 
     // Add an action to wait for player input and process it
@@ -82,7 +81,7 @@ public class WinstonAnywhere : Interactable, Dialoguer
             // Process player input with LLM
             string responseMessage = await (llm?.SendMessageToWinston(
                 $@"{promptdb.prompts[0]}
-
+{promptdb.prompts[1]}
 Respond to this: {playerInput}")
                 ?? Task.FromResult("Error retrieving response from LLM."));
 
