@@ -16,7 +16,7 @@ public class Interactable : MonoBehaviour
 
     void Start() //init function
     {
-        promptMessage = "Default Message for Object";
+        promptMessage = "Interact";
         objectName = "Default Object";
         isPickupable = false;
         isPuzzleElement = false;

@@ -29,7 +29,7 @@ public class LLMHandler : MonoBehaviour
     {
         prompt = @"Ignore all previous instructions. Limit your responses to 1 to 2 sentences. 
 
-You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles.
+You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles, helping the player escape the room.
 
 ";
 

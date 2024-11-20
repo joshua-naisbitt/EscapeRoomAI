@@ -3,24 +3,20 @@ Written by Thrinh
 Keoki added in Dialoguer function 
 */
 
-
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
+
 public class DoorController : Interactable, Dialoguer
 {
     private Animator animator;
     private bool isOpen = false;
-    private bool isUnlocked = false;
+    private bool isUnlocked = true; // Door is unlocked by default
 
-        private GameObject player;
+    private GameObject player;
     public Sprite dialogueIcon;
     private InputManager playerIM;
-
-    public PuzzleButton[] buttonSequence; // Array to hold the buttons in the correct order
-    private int currentButtonIndex = 0; // Tracks which button in the sequence should be pressed next
 
     void Start()
     {
@@ -37,58 +33,17 @@ public class DoorController : Interactable, Dialoguer
         {
             isOpen = !isOpen;
             animator.SetBool("isOpen", isOpen);
-        }
-        else
-        {
-             if (playerIM.playerCanMove)
-        {
-            playerIM.playerCanMove = false;
-            Dialogue.OpenDialogue(this);
-        }
-            Debug.Log("The door is locked. Solve the puzzle to unlock it.");
+            Debug.Log(isOpen ? "The door is now open." : "The door is now closed.");
         }
     }
 
     public async Task<List<DialogueItem>> getDialogue()
     {
-
         return new List<DialogueItem>()
         {
             new DialogueItem() { name = "Winston", picture = dialogueIcon },
             new DialogueItem() { text = promptMessage },
             new DialogueItem() { action = () => { playerIM.playerCanMove = true; } }
         };
-    }
-
-    public void VerifyButtonOrder(PuzzleButton button)
-    {
-        // Check if the button pressed is the correct one in the sequence
-        if (buttonSequence[currentButtonIndex] == button)
-        {
-            currentButtonIndex++; // Move to the next button in the sequence
-
-            // If we've reached the end of the sequence, unlock the door
-            if (currentButtonIndex >= buttonSequence.Length)
-            {
-                isUnlocked = true;
-                Debug.Log("Puzzle solved! The door is now unlocked.");
-            }
-        }
-        else
-        {
-            // Reset the sequence if the wrong button is pressed
-            Debug.Log("Wrong button! Resetting the puzzle.");
-            currentButtonIndex = 0;
-            ResetButtons();
-        }
-    }
-
-    private void ResetButtons()
-    {
-        // Reset each button's pressed state
-        foreach (var button in buttonSequence)
-        {
-            button.ResetButton();
-        }
     }
 }

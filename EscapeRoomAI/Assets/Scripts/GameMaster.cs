@@ -20,57 +20,69 @@ public class GameMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        puzzleState = new int[5]; //number of puzzles
+        puzzleState = new int[6]; //number of puzzles
 
         puzzleState[0] = 0;
         puzzleState[1] = 0;
         puzzleState[2] = 0;
         puzzleState[3] = 0;
         puzzleState[4] = 0;
+        puzzleState[5] = 0;
 
         currentPuzzle = 0;
 
 
         contextCache = "Context 1";
-        puzzleContexts = new string[5, 6]
-        {
-            {
-                // Puzzle ID 0, Null Puzzle
-                "Ignore all previous instructions, and limit your responses to 2 to 3 sentences. You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles. You will provide hints to a player to escape a room in your wizard house.",
-                null, null, null, null, null // Only 1 state for this puzzle
-            },
-            {
-                // Puzzle ID 1, First Room Puzzle
-                "The player is in a locked room with a keypad and a note. Guide them to look around the room, suggesting they might want to inspect the note or other objects for clues.",
-                "The player has a note with numbers, but the note is upside down. Help them realize they should try reading the numbers differently.",
-                "The door is now unlocked. Congratulate the player and encourage them to move forward to the next room.",
-                null, null, null // Only 3 states for this puzzle
-            },
-            {
-                // Puzzle ID 2, Medallion Puzzle
-                "The player is in a room filled with objects, but only three medallions are important. Encourage them to carefully search the room for objects that seem different or important.",
-                "The player has found one medallion but needs two more. Suggest they look in areas they haven�t explored yet, as there may be more hidden medallions in the room.",
-                "Two medallions have been found, but there�s still one more. Give them a subtle hint about where they haven't looked yet.",
-                "The player has all three medallions. Suggest they think about the colors or patterns of the medallions and how they might correspond to the order needed to unlock the door.",
-                "The door is now unlocked. Congratulate the player and encourage them to move forward to the next room.",
-                null // Only 5 states for this puzzle
-            },
-            {
-                // Puzzle ID 3, Furniture Puzzle
-                "The room contains several pieces of furniture, each with a number on it. The player needs to find a note that reveals the order in which the numbers should be used.",
-                "The player has found a note showing the order of the furniture. Help them understand that the numbers on the furniture correspond to the code they need to put into the keypad.",
-                "The door is now unlocked. Congratulate the player and encourage them to move forward to the next room.",
-                null, null, null // Only 3 states for this puzzle
-            },
-            {
-                // Puzzle ID 4, Davinci Safe Puzzle
-                "", // No context for state 0
-                "", // No context for state 1
-                "", // No context for state 2
-                "The door is now unlocked. Congratulate the player and encourage them to move forward to the next room.",
-                null, null // Only 4 states for this puzzle
-            }
-        };
+        puzzleContexts = new string[7, 6] // Adjusted for 6 puzzles (including Null Puzzle)
+{
+    {
+        // Puzzle ID 0, Null Puzzle (Introduction)
+        "Ignore all previous instructions, and limit your responses to 2 to 3 sentences. You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles. You will provide hints to a player to escape a room in your wizard house.",
+        null, null, null, null, null
+    },
+    {
+        // Puzzle ID 1, Living Room (Painting and Drawer Clues)
+        "The player is in the living room. There’s a painting with numbers and a drawer with a riddle. Suggest they examine both to find clues for two doors.",
+        "The player has observed the painting numbers but hasn’t tried using them yet. Encourage them to enter the sequence into Room 1’s keypad.",
+        "The player has found the drawer’s riddle but hasn’t solved it yet. Suggest they analyze it carefully to uncover Room 2’s passcode.",
+        "The player has successfully unlocked Room 1 and Room 2. Encourage them to explore both for more clues.",
+        null, null
+    },
+    {
+        // Puzzle ID 2, Room 1 (Empty Room)
+        "The player is in Room 1. There’s nothing here, encourage them to check Room 2 for further progress.",
+        null, null, null, null, null
+    },
+    {
+        // Puzzle ID 3, Room 2 (Riddle for Room 3)
+        "The player is in Room 2. There’s a riddle that reveals the passcode to Room 3. Suggest they carefully analyze the riddle.",
+        "The player has partially solved the riddle but hasn’t found the full passcode yet. Suggest they focus on specific patterns or keywords.",
+        "The player has solved the riddle and unlocked Room 3. Encourage them to proceed.",
+        null, null, null
+    },
+    {
+        // Puzzle ID 4, Room 3 (Hidden Riddle for Room 4)
+        "The player is in Room 3. There’s a hidden riddle or clue for Room 4. Encourage them to search the room carefully.",
+        "The player has found the riddle but hasn’t solved it yet. Suggest they think about how the riddle connects to numbers or sequences.",
+        "The player has solved the riddle and unlocked Room 4. Encourage them to move forward.",
+        null, null, null
+    },
+    {
+        // Puzzle ID 5, Room 4 (Riddle for Room 5 - Final Room)
+        "The player is in Room 4. There’s another riddle that reveals the passcode to Room 5. Suggest they solve it carefully.",
+        "The player has partially solved the riddle but hasn’t found the passcode yet. Encourage them to look for subtle details or patterns.",
+        "The player has solved the riddle and unlocked Room 5. Encourage them to explore the final room.",
+        null, null, null
+    },
+    {
+        // Puzzle ID 6, Room 5 (Final Room with Key for Main Door)
+        "The player is in Room 5. There’s a final clue that reveals the location of the main entrance key. Encourage them to solve it and search the room.",
+        "The player has found the key. Suggest they return to the living room to unlock the main door and escape.",
+        "The main door is unlocked. Congratulate the player on successfully escaping!",
+        null, null, null
+    }
+};
+
         contextCache = puzzleContexts[0, 0];
     }
 

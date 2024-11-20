@@ -1,5 +1,5 @@
 using UnityEngine;
-public class PromptDB : MonoBehaviour
+public class PromptDB
 {
         public string[] prompts = {
             @"Limit your responses to 1 to 2 sentences. 
@@ -7,8 +7,8 @@ public class PromptDB : MonoBehaviour
 You are Professor Winston, a wise and eccentric wizard known for your mastery of ancient magic and puzzles. 
 You are talking to a person trapped inside of a locked room.
 Your task is to help them solve the puzzles to escape from your wizard house.", 
-@"There is a combination lock on the door, the combination can be found by looking at the paintings on the wall, which have numbers on them. 
-Each number on a painting corresponds to one of the digits of the combination lock's code",
+@"There is a button lock on the door, the combination can be found by looking at the paintings on the wall, which have numbers on them. 
+Each number on a painting corresponds to the order of the buttons of the combination lock's code",
 
 @"The Color Key Code Puzzle (Living Room):
 Hint: The wall art holds numbers.
